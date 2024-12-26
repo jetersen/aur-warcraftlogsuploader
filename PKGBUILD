@@ -1,56 +1,44 @@
-# Maintainer: Thaodan <AUR+me@thaodan.de>
+# Maintainer: Deltachaos <mr@deltachaos.de>
+
 pkgname=warcraftlogsuploader
-pkgdesc='Warcraft Logs Uploader'
-_electron=electron
-pkgver=8.3.16
+_pkgapp=warcraftlogsuploader
+pkgver=8.15.13
 pkgrel=1
-arch=('any')
-url='https://github.com/RPGLogs/Uploaders-warcraftlogs'
-license=('custom')
-makedepends=('asar')
-depends=($_electron sh)
-source=("$url/releases/download/v$pkgver/warcraftlogs-v$pkgver.AppImage" "warcraftlogsuploader.desktop")
-sha512sums=('0d0935faa890a742bbe7add0e5b0b21c27e1687c8cc5a12a138824faf36f66a40192b92fbbd84fc5380a5e329dc720912070c4d399251dfe82528f3b56b1c7ce'
-            '2362bd563e08e20a75d7c8942574d43fe08ae04d68ddc4f20b64d6e6fc315c6b106b78cb3fb07e2361930584353e3a23b69322939c94edef075af8a74ba26086')
+pkgdesc="warcraftlogs.com desktop client for Linux"
+arch=('x86_64')
+depends=("fuse2")
+conflicts=("warcraftlogsuploader")
+url="https://warcraftlogs.com/"
+source=("${_pkgapp}-v8.15.13.AppImage::https://github.com/RPGLogs/Uploaders-warcraftlogs/releases/download/v8.15.13/warcraftlogs-v8.15.13.AppImage"
+        'start')
+license=('custom' 'MIT' 'custom:chromium-licenses')
+options=(!strip)
+# Skip checksum check for the WarcraftLogs binary, to avoid breakage on updates
+sha512sums=('8c14893d583ae6c82bcd334dd132a22d08abffc17c99447bb10b18eec99fd012f886b26c74f9d722f05c4e5f4492edcc391f2753f8bba43314ba80c5d708d901'
+            '1f8d504fb27e815f7efcc8e97672bad12f531d171ab8a08c49439fb4ee63b07e9355c49e56b5fb2eb2f6d202ce56a0526b609fef4b6209832026709002eba22a')
 
-prepare() {
-  :
-}
-
-build() {
-  local _source0=${source[0]##*/}
-  chmod +x $_source0
-  ./$_source0 --appimage-extract
-  asar extract squashfs-root/resources/app.asar $pkgname
-
-
-  sed -e 's/showDevTools: true/showDevTools: false/' -i $pkgname/js/main.js
-
-  cat > warcraftlogsuploader.sh <<EOF
-#!/bin/sh
-exec $_electron /usr/lib/$pkgname "\$@"
-EOF
-  chmod +x warcraftlogsuploader.sh
+pkgver() {
+    cd ${srcdir}
+    chmod +x ${srcdir}/${_pkgapp}-v8.15.13.AppImage
+    ${srcdir}/${_pkgapp}-v8.15.13.AppImage --appimage-extract >/dev/null
+    cat ${srcdir}/squashfs-root/warcraftlogs.desktop | grep 'X-AppImage-Version' | sed 's!^X-AppImage-Version=!!g'
 }
 
 package() {
-  install -dm 755 "$pkgdir"/usr/lib/$pkgname
-  install -dm755 "$pkgdir"/usr/share/icons/hicolor
+    cd ${srcdir}
+    chmod +x ${srcdir}/${_pkgapp}-v8.15.13.AppImage
+    ./${_pkgapp}-v8.15.13.AppImage --appimage-extract >/dev/null
+    sed -i 's/Exec=.*/Exec=\/usr\/bin\/'${_pkgapp}' %U/' squashfs-root/warcraftlogs.desktop
 
-  cp --archive --no-preserve=ownership \
-     $pkgname "$pkgdir"/usr/lib
+    install -Dm755 ${_pkgapp}-v8.15.13.AppImage "${pkgdir}/opt/${_pkgapp}/${_pkgapp}.AppImage"
+    install -Dm755 "start" "${pkgdir}/usr/bin/${_pkgapp}"
+    install -dm755 "${pkgdir}/usr/share/applications/"
+    install -dm755 "${pkgdir}/usr/share/icons/hicolor/512x512/apps/"
+    install -dm755 "${pkgdir}/usr/share/licenses/${_pkgapp}/"
 
-  install -Dm644 $pkgname/LICENSE.md \
-          "$pkgdir"/usr/share/licenses/$appname/LICENSE.md
-  rm "$pkgdir"/usr/lib/$pkgname/LICENSE.md
-
-  cp --archive \
-     --no-preserve=ownership \
-     squashfs-root/usr/share/icons/hicolor/* "$pkgdir"/usr/share/icons/hicolor
-  # fix permissions
-  find "$pkgdir"/usr/share/icons/hicolor -type d -exec chmod 755 {} \;
-
-  install -Dm755 warcraftlogsuploader.sh "$pkgdir"/usr/bin/warcraftlogsuploader
-  install -Dm644 warcraftlogsuploader.desktop \
-          "$pkgdir"/usr/share/applications/warcraftlogsuploader.desktop
+    cp -r --no-preserve=mode,ownership "${srcdir}/squashfs-root/usr/share/icons/hicolor/0x0/apps/warcraftlogs.png" "${pkgdir}/usr/share/icons/hicolor/512x512/apps/"
+    cp --no-preserve=mode,ownership "${srcdir}/squashfs-root/warcraftlogs.desktop" "${pkgdir}/usr/share/applications/"
+    for i in ${srcdir}/squashfs-root/LICENSE.* ${srcdir}/squashfs-root/LICENSES.*; do 
+      cp --no-preserve=mode,ownership "${i}" "${pkgdir}/usr/share/licenses/${_pkgapp}"
+    done
 }
