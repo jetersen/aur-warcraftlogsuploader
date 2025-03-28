@@ -2,35 +2,35 @@
 
 pkgname=warcraftlogsuploader
 _pkgapp=warcraftlogsuploader
-pkgver=8.16.24
+pkgver=8.16.25
 pkgrel=1
 pkgdesc="warcraftlogs.com desktop client for Linux"
 arch=('x86_64')
 depends=("fuse2")
 conflicts=("warcraftlogsuploader")
 url="https://warcraftlogs.com/"
-source=("${_pkgapp}-v8.16.24.AppImage::https://github.com/RPGLogs/Uploaders-warcraftlogs/releases/download/v8.16.24/warcraftlogs-v8.16.24.AppImage"
+source=("${_pkgapp}-v8.16.25.AppImage::https://github.com/RPGLogs/Uploaders-warcraftlogs/releases/download/v8.16.25/warcraftlogs-v8.16.25.AppImage"
         'start')
 license=('custom' 'MIT' 'custom:chromium-licenses')
 options=(!strip)
 # Skip checksum check for the WarcraftLogs binary, to avoid breakage on updates
-sha512sums=('f635f48eef7c63f4ea703befe5b7e2ec126fff80108c7545235faa0c8ae7f93416e83a6ee5f2d1b5c5a0e6576d9753b3470ff8f6b239d871879ea790eb9f9527'
+sha512sums=('d302dec052e26c70060caf5cac8eb9a523de40454fbd4b31a6a3776d2616433eabb8d2d93e39b2f2d2fb163135d28f105a7e70b1c8f5173eff06d693c8114705'
             '1f8d504fb27e815f7efcc8e97672bad12f531d171ab8a08c49439fb4ee63b07e9355c49e56b5fb2eb2f6d202ce56a0526b609fef4b6209832026709002eba22a')
 
 pkgver() {
     cd ${srcdir}
-    chmod +x ${srcdir}/${_pkgapp}-v8.16.24.AppImage
-    ${srcdir}/${_pkgapp}-v8.16.24.AppImage --appimage-extract >/dev/null
+    chmod +x ${srcdir}/${_pkgapp}-v8.16.25.AppImage
+    ${srcdir}/${_pkgapp}-v8.16.25.AppImage --appimage-extract >/dev/null
     cat ${srcdir}/squashfs-root/warcraftlogs.desktop | grep 'X-AppImage-Version' | sed 's!^X-AppImage-Version=!!g'
 }
 
 package() {
     cd ${srcdir}
-    chmod +x ${srcdir}/${_pkgapp}-v8.16.24.AppImage
-    ./${_pkgapp}-v8.16.24.AppImage --appimage-extract >/dev/null
+    chmod +x ${srcdir}/${_pkgapp}-v8.16.25.AppImage
+    ./${_pkgapp}-v8.16.25.AppImage --appimage-extract >/dev/null
     sed -i 's/Exec=.*/Exec=\/usr\/bin\/'${_pkgapp}' %U/' squashfs-root/warcraftlogs.desktop
 
-    install -Dm755 ${_pkgapp}-v8.16.24.AppImage "${pkgdir}/opt/${_pkgapp}/${_pkgapp}.AppImage"
+    install -Dm755 ${_pkgapp}-v8.16.25.AppImage "${pkgdir}/opt/${_pkgapp}/${_pkgapp}.AppImage"
     install -Dm755 "start" "${pkgdir}/usr/bin/${_pkgapp}"
     install -dm755 "${pkgdir}/usr/share/applications/"
     install -dm755 "${pkgdir}/usr/share/icons/hicolor/512x512/apps/"
