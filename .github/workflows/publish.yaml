@@ -24,7 +24,7 @@ jobs:
         echo "Latest version: $version"
         versionWithoutV=${version#v}
         source="https://github.com/RPGLogs/Uploaders-warcraftlogs/releases/download/${version}/warcraftlogs-${version}.AppImage"
-        wget "${source}" -O "warcraftlogsuploader-${version}.AppImage"
+        wget -nv "${source}" -O "warcraftlogsuploader-${version}.AppImage"
         hash=$(sha512sum "warcraftlogsuploader-${version}.AppImage" | awk '{print $1}')
         sed -i "s|__version__|${versionWithoutV}|g" PKGBUILD
         sed -i "s|__source__|${source}|g" PKGBUILD
