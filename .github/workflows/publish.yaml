@@ -1,0 +1,45 @@
+name: Build with makepkg
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: "0 6 * * 1"
+
+permissions:
+  actions: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Update PKGBUILD
+      run: |
+        version=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" https://api.github.com/repos/RPGLogs/Uploaders-warcraftlogs/releases/latest | jq -r '.tag_name')
+        echo "Latest version: $version"
+        versionWithoutV=${version#v}
+        source="https://github.com/RPGLogs/Uploaders-warcraftlogs/releases/download/${version}/warcraftlogs-${version}.AppImage"
+        wget "${source}" -O "warcraftlogsuploader-${version}.AppImage"
+        hash=$(sha512sum "warcraftlogsuploader-${version}.AppImage" | awk '{print $1}')
+        sed -i "s|__version__|${versionWithoutV}|g" PKGBUILD
+        sed -i "s|__source|${source}|g" PKGBUILD
+        sed -i "s|SKIP|${hash}|g" PKGBUILD
+
+    - name: Publish AUR package
+      uses: KSXGitHub/github-actions-deploy-aur@v4.1.1
+      with:
+        pkgname: warcraftlogsuploader
+        pkgbuild: ./PKGBUILD
+        commit_username: 'Joseph Petersen'
+        commit_email: 'me@jetersen.dev'
+        ssh_private_key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
+        commit_message: Update AUR package
+        ssh_keyscan_types: ed25519
+        assets: |
+          warcraftlogsuploader*.AppImage
+          start
