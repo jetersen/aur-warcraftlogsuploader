@@ -1,4 +1,4 @@
-# Maintainer: Deltachaos <mr@deltachaos.de>
+# Maintainer: jetersen <me@jetersen.dev>
 
 pkgname=warcraftlogsuploader
 _pkgapp=warcraftlogsuploader
