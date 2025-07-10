@@ -2,13 +2,13 @@
 
 pkgname=warcraftlogsuploader
 pkgver=__version__
-pkgrel=2
+pkgrel=3
 pkgdesc="warcraftlogs.com desktop client for Linux"
 arch=('x86_64')
 depends=("fuse2")
 conflicts=("warcraftlogsuploader")
 url="https://warcraftlogs.com/"
-source=("${pkgname}-${pkgver}.AppImage::__source__"
+source=("${pkgname}-v${pkgver}.AppImage::__source__"
         'start')
 license=('custom' 'MIT' 'custom:chromium-licenses')
 options=(!strip)
