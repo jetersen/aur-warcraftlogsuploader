@@ -27,7 +27,7 @@ jobs:
         wget "${source}" -O "warcraftlogsuploader-${version}.AppImage"
         hash=$(sha512sum "warcraftlogsuploader-${version}.AppImage" | awk '{print $1}')
         sed -i "s|__version__|${versionWithoutV}|g" PKGBUILD
-        sed -i "s|__source|${source}|g" PKGBUILD
+        sed -i "s|__source__|${source}|g" PKGBUILD
         sed -i "s|SKIP|${hash}|g" PKGBUILD
 
     - name: Publish AUR package
