@@ -7,13 +7,13 @@ This repository provides an automated daily build for updating the Arch Linux AU
 The `warcraftlogsuploader` is a tool for uploading logs to [WarcraftLogs](https://warcraftlogs.com/), allowing World of Warcraft players to share and analyze their raid and dungeon performance. This automated build ensures that the latest release of the uploader is always available on the Arch User Repository (AUR) for Arch Linux users.
 
 * [warcraftlogsuploader on AUR](https://aur.archlinux.org/packages/warcraftlogsuploader)
-* [warcraftlogsuploader on GitHub](https://github.com/Deltachaos/aur-warcraftlogsuploader)
+* [warcraftlogsuploader on GitHub](https://github.com/jetersen/aur-warcraftlogsuploader)
 
 ## Features
 
-- **Automated daily build**: Automatically fetches the latest release of `Uploaders-warcraftlogs` from the official GitHub repository.
-- **Updates the AUR package**: Ensures the `warcraftlogsuploader` package on the Arch Linux AUR stays up to date with the latest features and bug fixes.
-- **Easy installation**: Use `yay` or any AUR helper to install and update the package.
+* **Automated daily build**: Automatically fetches the latest release of `Uploaders-warcraftlogs` from the official GitHub repository.
+* **Updates the AUR package**: Ensures the `warcraftlogsuploader` package on the Arch Linux AUR stays up to date with the latest features and bug fixes.
+* **Easy installation**: Use `yay` or any AUR helper to install and update the package.
 
 ## Installation
 
@@ -53,5 +53,5 @@ The build job is licensed under the MIT License. The [WarcraftLogs](https://warc
 
 ## Acknowledgments
 
-- [RPGLogs/Uploaders-warcraftlogs](https://github.com/RPGLogs/Uploaders-warcraftlogs) - WarcraftLogs Release Repository.
-- [Arch Linux AUR](https://aur.archlinux.org/) - The Arch User Repository.
+* [RPGLogs/Uploaders-warcraftlogs](https://github.com/RPGLogs/Uploaders-warcraftlogs) - WarcraftLogs Release Repository.
+* [Arch Linux AUR](https://aur.archlinux.org/) - The Arch User Repository.
