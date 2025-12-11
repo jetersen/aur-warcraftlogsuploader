@@ -20,7 +20,7 @@ package() {
     cd "${srcdir}"
     chmod +x "${srcdir}/${pkgname}-v${pkgver}.AppImage"
     "./${pkgname}-v${pkgver}.AppImage" --appimage-extract >/dev/null
-    sed -i 's/Exec=.*/Exec=\/usr\/bin\/'${pkgname}' %U/' squashfs-root/warcraftlogs.desktop
+    sed -i 's/Exec=.*/Exec=\/usr\/bin\/'${pkgname}' %U/' "squashfs-root/Warcraft Logs Uploader.desktop"
 
     install -Dm755 "${pkgname}-v${pkgver}.AppImage" "${pkgdir}/opt/${pkgname}/${pkgname}.AppImage"
     install -Dm755 "start" "${pkgdir}/usr/bin/${pkgname}"
@@ -28,7 +28,7 @@ package() {
     install -dm755 "${pkgdir}/usr/share/icons/hicolor/512x512/apps/"
     install -dm755 "${pkgdir}/usr/share/licenses/${pkgname}/"
 
-    cp --no-preserve=mode,ownership "${srcdir}/squashfs-root/warcraftlogs.desktop" "${pkgdir}/usr/share/applications/"
+    cp --no-preserve=mode,ownership "${srcdir}/squashfs-root/Warcraft Logs Uploader.desktop" "${pkgdir}/usr/share/applications/"
     for i in ${srcdir}/squashfs-root/LICENSE.* ${srcdir}/squashfs-root/LICENSES.*; do
       cp --no-preserve=mode,ownership "${i}" "${pkgdir}/usr/share/licenses/${pkgname}"
     done
